@@ -34,7 +34,7 @@ def paginate_tweet_content(username, content):
         while tokens and len(
                 ' '.join(page_tokens + [tokens[0]])) < 140 - suffix_length:
             try:
-                page_tokens.append(tokens.pop())
+                page_tokens.append(tokens.pop(0))
             except IndexError:
                 # all tokens have been used
                 break
@@ -47,8 +47,17 @@ def paginate_tweet_content(username, content):
 def run_zork(tweet_id, username, tweet_content):
     save_path = os.path.join(ZORK_SAVE_PATH_BASE, 'zork_%s.sav' % username)
     command = tweet_content.replace('@playzork', '').strip()
-    output = dumb_frotz.execute(ZORK_PATH, command=command,
-        save_path=save_path)
+    if command == 'play zork':
+        # new game, delete old saved game
+        # TODO: ask for confirm on delete
+        if os.path.exists(save_path):
+            os.remove(save_path)
+        command = None
+    if not os.path.exists(save_path) and command is not None:
+        output = 'Tweet "play zork" to start!'
+    else:
+        output = dumb_frotz.execute(ZORK_PATH, command=command,
+            save_path=save_path)
 
     # now reply with the output
     consumer = oauth.Consumer(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET)

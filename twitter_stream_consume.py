@@ -31,15 +31,17 @@ def twitter_stream(username, password, handler, **kwargs):
             process.terminate()
     atexit.register(at_exit)
 
-    last_line = ''
-    pipe = open(pipe_path, 'r')
     while True:
-        last_line = pipe.readline()
-        if last_line:
-            try:
-                tweet = anyjson.deserialize(last_line)
-            except ValueError:
-                print 'Error decoding tweet: "%s"' % last_line
-            else:
-                handler(tweet)
+        with open(pipe_path, 'r') as pipe:
+            while True:
+                last_line = pipe.readline()
+                if last_line == '':
+                    break
+                try:
+                    tweet = anyjson.deserialize(last_line)
+                except ValueError:
+                    print 'Error decoding tweet: "%s"' % last_line
+                else:
+                    print 'Received tweet'
+                    handler(tweet)
 

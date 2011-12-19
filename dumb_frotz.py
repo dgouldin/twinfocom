@@ -22,8 +22,13 @@ def format_output(output, load, command, save):
     if to_line:
         lines = lines[:to_line]
     where_line = lines.pop(0).replace('>', '').strip()
-    where = where_line.split('    ', 1)[0]
-    return '[%s] %s' % (where, ' '.join(lines))
+    where_parts = where_line.split('    ')
+    if command and not len(where_parts) > 1:
+        # no where line
+        lines.insert(0, where_parts[0])
+        return ' '.join(lines)
+    else:
+        return '[%s] %s' % (where_parts[0], ' '.join(lines))
 
 def execute(game_path, command=None, save_path=None):
     args = [DFROTZ, game_path]
