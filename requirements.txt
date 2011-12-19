@@ -1,0 +1,4 @@
+anyjson
+oauth2
+celery
+
