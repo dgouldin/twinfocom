@@ -46,7 +46,7 @@ def paginate_tweet_content(username, content):
 @task
 def run_zork(tweet_id, username, tweet_content):
     save_path = os.path.join(ZORK_SAVE_PATH_BASE, 'zork_%s.sav' % username)
-    command = tweet_content.replace('@playzork', '').strip()
+    command = tweet_content.replace('@playzork', '').strip(' .')
     if command == 'play zork':
         # new game, delete old saved game
         # TODO: ask for confirm on delete

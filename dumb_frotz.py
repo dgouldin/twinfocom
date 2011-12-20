@@ -21,7 +21,13 @@ def format_output(output, load, command, save):
     lines = lines[from_line:]
     if to_line:
         lines = lines[:to_line]
-    where_line = lines.pop(0).replace('>', '').strip()
+    try:
+        where_line = lines.pop(0).replace('>', '').strip()
+    except IndexError:
+        # TODO: there's an off-by-1 here somewhere, investigate
+        lines = filter(lambda l: l and l != '>', output.split('\n'))
+        lines = lines[:to_line]
+        return lines[-1].replace('>', '').strip()
     where_parts = where_line.split('    ')
     if command and not len(where_parts) > 1:
         # no where line
