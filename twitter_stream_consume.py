@@ -37,6 +37,9 @@ def twitter_stream(username, password, handler, **kwargs):
                 last_line = pipe.readline()
                 if last_line == '':
                     break
+                elif last_line == '\n':
+                    continue
+
                 try:
                     tweet = anyjson.deserialize(last_line)
                 except ValueError:

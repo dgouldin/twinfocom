@@ -10,5 +10,5 @@ do
   then
     mkfifo $TWITTER_STREAM_PIPE_PATH;
   fi
-  curl -N https://stream.twitter.com/1/statuses/filter.json?$TWITTER_STREAM_QUERYSTRING -u $TWITTER_USERNAME:$TWITTER_PASSWORD > $TWITTER_STREAM_PIPE_PATH
+  curl -N https://stream.twitter.com/1/statuses/filter.json?$TWITTER_STREAM_QUERYSTRING -u $TWITTER_USERNAME:$TWITTER_PASSWORD > $TWITTER_STREAM_PIPE_PATH 2> /dev/null
 done
